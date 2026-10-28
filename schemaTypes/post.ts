@@ -35,6 +35,7 @@ export const post = defineType({
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
+      initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'excerpt',
@@ -57,6 +58,21 @@ export const post = defineType({
       of: [
         defineArrayMember({type: 'block'}),
         defineArrayMember({type: pteImage.name}),
+        // Native images written by external publishers coexist with legacy pteImage blocks.
+        defineArrayMember({
+          type: 'image',
+          title: 'Inline image',
+          options: {hotspot: true},
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt text',
+              type: 'string',
+              description: 'Describe the image for accessibility',
+            }),
+            defineField({name: 'caption', title: 'Caption', type: 'string'}),
+          ],
+        }),
       ],
     }),
   ],
